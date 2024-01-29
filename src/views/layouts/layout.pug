@@ -1,0 +1,17 @@
+html
+  head
+    meta(http-equiv="Content-Type" content="text/html;charset=UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title
+    link(rel="stylesheet" href="/scripts/reset-css/reset.css")
+    link(rel="stylesheet" href="/scripts/bootstrap/dist/css/bootstrap.min.css")
+    link(rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon")
+    script(src="/scripts/bootstrap/dist/js/bootstrap.min.js") 
+    block scripts
+  body
+    include ../partials/header
+    div(style={height: 'calc(100vh - 105px)'})
+      div.p-3
+        block content
+    include ../partials/footer
+
