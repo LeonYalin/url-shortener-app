@@ -1,4 +1,15 @@
 extends layouts/layout.pug
 
 block content
-  div= message
+  .h-100.d-flex.flex-column.overflow-auto
+    .col-6.mt-4.mx-auto.text-center
+      h3 Free URL Shortener
+      h6.text-secondary Create short & memorable links in seconds.
+      button.btn.btn-lg.w-100.btn-primary(style={'max-width': '400px'}) Add URL
+
+    if urls.length > 0
+      .mt-4
+      each url in urls
+        include partials/url_card
+    else
+      .d-flex.align-items-center.justify-content-center.flex-grow-1 No saved URLs found.
