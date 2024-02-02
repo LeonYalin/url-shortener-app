@@ -5,11 +5,14 @@ html
     title= title
     link(rel="stylesheet" href="/scripts/reset-css/reset.css")
     link(rel="stylesheet" href="/scripts/bootstrap/dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/scripts/bootstrap-icons/font/bootstrap-icons.min.css")
     link(rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon")
     script(src="/scripts/bootstrap/dist/js/bootstrap.min.js") 
-    script(src="/scripts/lodash/lodash.min.js") 
+    script(src="/scripts/lodash/lodash.min.js")
+    script(src="/js/global_api.js")
     block scripts
   body
+    include ../partials/toast
     include ../partials/header
     div(style={height: 'calc(100vh - 90px)'})
       div.p-3

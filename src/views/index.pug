@@ -1,5 +1,15 @@
 extends layouts/layout.pug
 
+block scripts
+  script.
+    window.PageApi = {
+      onCopyLinkClick() {
+        const id = event.target.id;
+        navigator.clipboard.writeText(id)
+        GlobalApi.Toast.show("Link Copied")
+      }
+    }
+
 block content
   .h-100.d-flex.flex-column.overflow-auto
     .col-6.mt-4.mx-auto.text-center

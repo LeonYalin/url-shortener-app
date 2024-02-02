@@ -2,10 +2,14 @@
   .row 
     .col-md-4
       - const src = link && link.original || "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=11e949fc5d06576bc8b80ec192896753"
-      iframe.img-fluid.rounded-start(src=link.original, frameborder="0" height="150px")
+      iframe.img-fluid.rounded-start(src=link.original, frameborder="0" style={height: "163px"})
     .col-md-8 
-      .card-body 
-        h5.card-title Original URL
+      .card-body.position-relative
+        .card-title.d-flex.align-items-center
+          h5.m-0= link.short
+          button.btn.btn-light.ms-2
+            i.bi.bi-clipboard(onclick="PageApi.onCopyLinkClick()" id=link.short) &nbsp;Copy
         p.card-text= link.original 
         p.card-text 
-          small.text-body-secondary Last updated 3 mins ago
+          - createdAt = link.createdAt ? new Date(link.createdAt).toLocaleString() : ""
+          small.text-body-secondary= createdAt
