@@ -5,14 +5,16 @@ block scripts
     window.addEventListener('load', function() {
       const input = document.getElementById('original')
       const preview = document.getElementById('preview')
+      const noPreview = document.getElementById('no-preview')
       input.addEventListener('input',_.debounce((e) => {
         preview.src = e.target.value
+        noPreview.classList.toggle('d-none', e.target.value !== "")
       }, 300))
     })
 
 block content
   - var invalid = errors && errors.length > 0
-  form.mt-4.mx-auto.needs-validation(action='submit' method='post' style={'max-width': '562px'} novalidate)
+  form.mt-4.mx-auto.needs-validation(action='/link/submit' method='post' style={'max-width': '562px'} novalidate)
     .mb-3
       label.form-label(for="original") Original URL
       input.form-control(type="url" placeholder="Enter link here" name="original" id="original" class=invalid ? 'is-invalid' : '' autofocus required)
@@ -22,6 +24,8 @@ block content
           .invalid-feedback= error.msg
       .form-text Your link will be converted to a nice short form.
     h3.mt-4 Preview
-    .my-3
-      iframe#preview.w-100(src=url.original, frameborder="0" height="300px")
+    .my-3.position-relative
+      if !link.original
+        #no-preview.d-flex.align-items-center.justify-content-center.w-100.position-absolute(style={height: "300px", background: "radial-gradient(#d1d1d1, transparent)", border: "1px solid #dfdfdf"}) Preview not available.
+      iframe#preview.w-100(src=link.original, frameborder="0" height="300px")
     button.btn.btn-primary(type="submit") Submit

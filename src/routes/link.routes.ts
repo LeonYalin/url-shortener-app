@@ -1,10 +1,10 @@
 import express from "express";
-import urlController from "../controllers/url.controller";
+import linkController from "../controllers/link.controller";
 import { body } from "express-validator";
 
 const router = express.Router();
 
-router.get("/:id", urlController.getById);
+router.get("/:id", linkController.getLinkById);
 
 router.post(
   "/submit",
@@ -16,7 +16,7 @@ router.post(
       .isURL()
       .withMessage("Field should be valid URL"),
   ],
-  urlController.submit
+  linkController.submitLink
 );
 
 export { router as urlRoutes };
