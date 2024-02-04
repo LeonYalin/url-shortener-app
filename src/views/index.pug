@@ -2,13 +2,44 @@ extends layouts/layout.pug
 
 block scripts
   script.
-    window.PageApi = {
-      onCopyLinkClick() {
-        const id = event.target.id;
-        navigator.clipboard.writeText(id)
-        GlobalApi.Toast.show("Link Copied")
+    window.addEventListener("load", function() {
+      window.PageApi = {
+        handleCopyLink(e) {
+          const linkshort = e.dataset.linkshort;
+          navigator.clipboard.writeText(linkshort)
+          window.GlobalApi.Toast.show("Link Copied")
+        },
+        handleEditLink(e) {
+          const linkid = e.dataset.linkid
+          window.location.href = "/link/" + linkid
+        },
+        handleDeleteLink(e) {
+          event.preventDefault()
+          event.stopPropagation()
+          window.GlobalApi.Modal.show("Delete URL", "Are you sure you want to delete this URL?", () => {
+            const linkid = e.dataset.linkid
+            const url = `/link/${linkid}`
+            fetch(url, {method: 'delete'})
+              .then(response => response.json())
+              .then(() => {
+                // Deleted in Db, now remove the html block
+                const cardEl = document.querySelector(`[data-cardid="${linkid}"]`)
+                cardEl && cardEl.remove()
+                window.GlobalApi.Toast.show("Link Successfully Deleted.")
+              })
+              .catch(e => console.log(e))
+          })
+        },
       }
-    }
+
+      // show flash if exists
+      try {
+        const flash = JSON.parse('!{JSON.stringify(flash)}'); // server variable
+        window.GlobalApi.Flash.show(flash)
+      } catch (e){
+        console.info("No flash data available atm")
+      }
+    })
 
 block content
   .h-100.d-flex.flex-column.overflow-auto
@@ -22,4 +53,4 @@ block content
       each link in links
         include partials/link_card
     else
-      .d-flex.align-items-center.justify-content-center.flex-grow-1 No saved URLs found.
+      #empty-msg.d-flex.align-items-center.justify-content-center.flex-grow-1 No saved URLs found.

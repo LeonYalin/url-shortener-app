@@ -6,6 +6,7 @@ async function getAllLinks(req: Request, res: Response) {
   res.render("index", {
     title: "Url Shortener",
     links,
+    flash: req.session.flash,
   });
 }
 

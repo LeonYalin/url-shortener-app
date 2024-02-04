@@ -2,10 +2,16 @@ extends layouts/layout.pug
 
 block scripts
   script.
+    const link=JSON.parse('!{JSON.stringify(link)}'); // server variable
+    isNew = link.id === undefined
+
     window.addEventListener('load', function() {
       const input = document.getElementById('original')
       const preview = document.getElementById('preview')
       const noPreview = document.getElementById('no-preview')
+      if (!isNew) {
+        noPreview.classList.add('d-none')
+      }
       input.addEventListener('input',_.debounce((e) => {
         preview.src = e.target.value
         noPreview.classList.toggle('d-none', e.target.value !== "")
@@ -13,11 +19,15 @@ block scripts
     })
 
 block content
-  - var invalid = errors && errors.length > 0
-  form.mt-4.mx-auto.needs-validation(action='/link/submit' method='post' style={'max-width': '562px'} novalidate)
+  -
+    const invalid = errors && errors.length > 0
+    const isNew =  link.id === undefined 
+    const method = isNew ? "post" : "post?_method=PUT"
+    const action = isNew ? "/link/0" : `/link/${link.id}?_method=PUT`
+  form.mt-4.mx-auto.needs-validation(action=action method='post' style={'max-width': '562px'} novalidate)
     .mb-3
       label.form-label(for="original") Original URL
-      input.form-control(type="url" placeholder="Enter link here" name="original" id="original" class=invalid ? 'is-invalid' : '' autofocus required)
+      input.form-control(type="url" value=link.original placeholder="Enter link here" name="original" id="original" class=invalid ? 'is-invalid' : '' autofocus required)
       .valid-feedback Looks good.
       if invalid
         each error in errors
@@ -25,7 +35,6 @@ block content
       .form-text Your link will be converted to a nice short form.
     h3.mt-4 Preview
     .my-3.position-relative
-      if !link.original
-        #no-preview.d-flex.align-items-center.justify-content-center.w-100.position-absolute(style={height: "300px", background: "radial-gradient(#d1d1d1, transparent)", border: "1px solid #dfdfdf"}) Preview not available.
+      #no-preview.d-flex.align-items-center.justify-content-center.w-100.position-absolute(style={height: "300px", background: "radial-gradient(#d1d1d1, transparent)", border: "1px solid #dfdfdf"}) Preview not available.
       iframe#preview.w-100(src=link.original, frameborder="0" height="300px")
     button.btn.btn-primary(type="submit") Submit

@@ -19,7 +19,7 @@ async function getLinkById(req: Request, res: Response) {
   }
 }
 
-async function submitLink(req: Request, res: Response) {
+async function createLink(req: Request, res: Response) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.render("link_details", {
@@ -29,11 +29,42 @@ async function submitLink(req: Request, res: Response) {
   } else {
     const link = Link.build(req.body.original);
     await link.save();
+    req.session.flash = { level: "success", msg: "Link successfully created." };
     res.redirect("/");
+  }
+}
+
+async function updateLink(req: Request, res: Response) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.render("link_details", {
+      link: {},
+      errors: errors.array(),
+    });
+  } else {
+    const updatedLink = Link.build(req.body.original);
+    await Link.updateOne(
+      { _id: req.params.id },
+      { original: updatedLink.original, short: updatedLink.short }
+    );
+    req.session.flash = { level: "success", msg: "Link successfully updated." };
+    res.redirect("/");
+  }
+}
+
+async function deleteLink(req: Request, res: Response) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).send("Invalid request");
+  } else {
+    await Link.deleteOne({ _id: req.params.id });
+    res.json({ id: req.params.id });
   }
 }
 
 export default {
   getLinkById,
-  submitLink,
+  createLink,
+  updateLink,
+  deleteLink,
 };
