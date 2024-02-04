@@ -8,6 +8,7 @@ import path from "path";
 import { linkRoutes } from "./src/routes/link.routes";
 import { errorHandling } from "./src/middlewares/error_handling.middleware";
 import { shortRoutes } from "./src/routes/short.routes";
+import { NotFoundError } from "./src/errors/not_found.error";
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.use(indexRoutes);
 app.use("/link", linkRoutes);
 app.use("/s", shortRoutes);
 app.all("*", (req, res) => {
-  res.redirect("/");
+  throw new NotFoundError();
 });
 app.use(errorHandling);
 

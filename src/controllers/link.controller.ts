@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Link } from "../models/link.model";
+import { BadRequestError } from "../errors/bad_request.error";
 
 async function getLinkById(req: Request, res: Response) {
   const isNew = req.params.id === "0";
@@ -11,7 +12,7 @@ async function getLinkById(req: Request, res: Response) {
   } else {
     const link = await Link.findById(req.params.id).exec();
     if (!link) {
-      throw new Error("Invalid link ID");
+      throw new BadRequestError("Invalid request");
     }
     res.render("link_details", {
       link,
@@ -55,11 +56,10 @@ async function updateLink(req: Request, res: Response) {
 async function deleteLink(req: Request, res: Response) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).send("Invalid request");
-  } else {
-    await Link.deleteOne({ _id: req.params.id });
-    res.json({ id: req.params.id });
+    throw new BadRequestError("Onvalid request");
   }
+  await Link.deleteOne({ _id: req.params.id });
+  res.json({ id: req.params.id });
 }
 
 export default {

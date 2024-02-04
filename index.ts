@@ -1,16 +1,17 @@
 import { app } from "./app";
 import mongoose from "mongoose";
+import { DbConnectionError } from "./src/errors/db_connection.error";
 
 const PORT = process.env.PORT || 3000;
+const mongoUrl =
+  "mongodb+srv://url_shortener_db_admin:root@cluster0.xklmrbb.mongodb.net/url_shortener_db";
 
 (async function main() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://url_shortener_db_admin:root@cluster0.xklmrbb.mongodb.net/url_shortener_db"
-    );
-    console.log("connected to MongoDb");
-  } catch (e) {
-    console.error("error connecting to MongoDb", e);
+    await mongoose.connect(mongoUrl);
+    console.log("Connected to MongoDb");
+  } catch (e: any) {
+    throw new DbConnectionError(e);
   }
 
   app.listen(PORT, () => {
