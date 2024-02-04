@@ -1,4 +1,5 @@
 import { Document, Model, Schema, model } from "mongoose";
+import urlService from "../services/url.service";
 
 interface LinkDoc extends Document {
   original: string;
@@ -26,7 +27,7 @@ const linkSchema = new Schema<LinkDoc, LinkModel>(
   }
 );
 linkSchema.statics.build = function (original: string) {
-  const short = original.substring(0, 3); // TODO: provide implementation
+  const short = urlService.generateShortUrl();
   return new Link({ original, short });
 };
 

@@ -6,7 +6,8 @@ block scripts
       window.PageApi = {
         handleCopyLink(e) {
           const linkshort = e.dataset.linkshort;
-          navigator.clipboard.writeText(linkshort)
+          const fullLink = `${window.location.host}${linkshort}`
+          navigator.clipboard.writeText(fullLink)
           window.GlobalApi.Toast.show("Link Copied")
         },
         handleEditLink(e) {
@@ -30,6 +31,9 @@ block scripts
               .catch(e => console.log(e))
           })
         },
+        handleShortLinkClick(link) {
+          window.open(`${window.location.host}${link}`, '_blank');
+        }
       }
 
       // show flash if exists
