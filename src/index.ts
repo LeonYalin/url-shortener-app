@@ -1,6 +1,6 @@
 import { app } from "./app";
 import mongoose from "mongoose";
-import { DbConnectionError } from "./src/errors/db_connection.error";
+import { DbConnectionError } from "./errors/db_connection.error";
 
 const PORT = process.env.PORT || 3000;
 const mongoUrl =

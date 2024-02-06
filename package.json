@@ -4,7 +4,9 @@
   "description": "This project represents a URL Shortener app",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "nodemon src/index.ts",
+    "serve": "node dist/index.js",
+    "build": "tsc && tscp"
   },
   "keywords": [],
   "author": "Leon Yalin",
@@ -16,7 +18,8 @@
     "@types/method-override": "^0.0.35",
     "@types/node": "^20.11.5",
     "nodemon": "^3.0.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript-cp": "^0.1.9"
   },
   "dependencies": {
     "bootstrap": "^5.3.2",

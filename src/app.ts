@@ -3,12 +3,12 @@ import "express-async-errors";
 import methodOverride from "method-override";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import { indexRoutes } from "./src/routes/index.routes";
+import { indexRoutes } from "./routes/index.routes";
 import path from "path";
-import { linkRoutes } from "./src/routes/link.routes";
-import { errorHandling } from "./src/middlewares/error_handling.middleware";
-import { shortRoutes } from "./src/routes/short.routes";
-import { NotFoundError } from "./src/errors/not_found.error";
+import { linkRoutes } from "./routes/link.routes";
+import { errorHandling } from "./middlewares/error_handling.middleware";
+import { shortRoutes } from "./routes/short.routes";
+import { NotFoundError } from "./errors/not_found.error";
 
 const app = express();
 
@@ -20,9 +20,9 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use("/scripts", express.static(path.join(__dirname, "node_modules")));
+app.use("/scripts", express.static(path.join(__dirname, "..", "node_modules")));
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "src", "views"));
+app.set("views", path.join(__dirname, "views"));
 
 app.use(indexRoutes);
 app.use("/links", linkRoutes);
