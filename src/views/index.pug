@@ -6,33 +6,42 @@ block scripts
       window.PageApi = {
         handleCopyLink(e) {
           const linkshort = e.dataset.linkshort;
-          const fullLink = `${window.location.host}${linkshort}`
-          navigator.clipboard.writeText(fullLink)
-          window.GlobalApi.Toast.show("Link Copied")
+          const fullLink = `${window.location.host}${linkshort}`;
+          navigator.clipboard.writeText(fullLink);
+          window.GlobalApi.Toast.show("Link Copied");
         },
         handleEditLink(e) {
-          const linkid = e.dataset.linkid
-          window.location.href = "/link/" + linkid
+          const linkid = e.dataset.linkid;
+          window.location.href = "/links/" + linkid;
         },
         handleDeleteLink(e) {
-          event.preventDefault()
-          event.stopPropagation()
+          event.preventDefault();
+          event.stopPropagation();
           window.GlobalApi.Modal.show("Delete URL", "Are you sure you want to delete this URL?", () => {
-            const linkid = e.dataset.linkid
-            const url = `/link/${linkid}`
+            const linkid = e.dataset.linkid;
+            const url = `/links/${linkid}`;
             fetch(url, {method: 'delete'})
               .then(response => response.json())
               .then(() => {
                 // Deleted in Db, now remove the html block
-                const cardEl = document.querySelector(`[data-cardid="${linkid}"]`)
-                cardEl && cardEl.remove()
-                window.GlobalApi.Toast.show("Link Successfully Deleted.")
+                const cardEl = document.querySelector(`[data-cardid="${linkid}"]`);
+                cardEl && cardEl.remove();
+                window.GlobalApi.Toast.show("Link Successfully Deleted.");
               })
               .catch(e => console.log(e))
           })
         },
         handleShortLinkClick(link) {
           window.open(`${window.location.host}${link}`, '_blank');
+        },
+        handleSortChange(e) {
+          const value = e.querySelector('input[checked]').value;
+          e.closest('form').submit();
+        },
+        handlePageChange(page) {
+          const sort = document.querySelector('input[name="sort"][checked]').value;
+          const filter = document.querySelector('input[name="filter"]').value;
+          window.location.href = `${window.location.origin}/links?page=${page}&sort=${sort}&filter=${filter}`;
         }
       }
 
@@ -47,13 +56,16 @@ block scripts
 
 block content
   .h-100.d-flex.flex-column.overflow-auto
-    .col-6.mt-4.mx-auto.text-center
+    .col-6.mt-4.mx-auto.text-center(style={"max-width": "400px"})
       h3 Free URL Shortener
       h6.text-secondary Create short & memorable links in seconds.
-      a.btn.btn-lg.w-100.btn-primary(href="/link/0" role="button" style={'max-width': '400px'}) Add URL
+      a.btn.btn-lg.w-100.btn-primary(href="/links/0" role="button" style={'max-width': '400px'}) Add URL
+    .col-6.mt-5.mx-auto.p-0(style={"max-width": "585px"})
+      include partials/sort_filter_block
+    .col-6.mt-2.mx-auto.p-0 
 
     if links.length > 0
-      .mt-4
+      .mt-0
       each link in links
         include partials/link_card
     else

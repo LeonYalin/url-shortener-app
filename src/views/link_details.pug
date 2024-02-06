@@ -23,7 +23,7 @@ block content
     const invalid = errors && errors.length > 0
     const isNew =  link.id === undefined 
     const method = isNew ? "post" : "post?_method=PUT"
-    const action = isNew ? "/link/0" : `/link/${link.id}?_method=PUT`
+    const action = isNew ? "/links/0" : `/links/${link.id}?_method=PUT`
   form.mt-4.mx-auto.needs-validation(action=action method='post' style={'max-width': '562px'} novalidate)
     .mb-3
       label.form-label(for="original") Original URL

@@ -25,7 +25,7 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "src", "views"));
 
 app.use(indexRoutes);
-app.use("/link", linkRoutes);
+app.use("/links", linkRoutes);
 app.use("/s", shortRoutes);
 app.all("*", (req, res) => {
   throw new NotFoundError();

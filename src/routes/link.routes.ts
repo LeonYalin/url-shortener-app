@@ -15,9 +15,14 @@ const originalParamValidation = body("original")
 
 const router = express.Router();
 
+router.get("/", linkController.getAllLinks);
 router.get("/:id", linkController.getLinkById);
 router.delete("/:id", [idParamValidation], linkController.deleteLink);
 router.post("/:id", [originalParamValidation], linkController.createLink);
-router.put("/:id", [idParamValidation, originalParamValidation], linkController.updateLink);
+router.put(
+  "/:id",
+  [idParamValidation, originalParamValidation],
+  linkController.updateLink
+);
 
 export { router as linkRoutes };

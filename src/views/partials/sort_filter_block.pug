@@ -1,0 +1,24 @@
+form#sort-filter-form.container.p-0(method="GET" action="/links")
+  .row
+    .col-lg-4.mb-3.mb-lg-0.d-flex.align-items-center
+      input.ms-4.form-control(value=query.filter placeholder="Search" name="filter" id="filter" style={"border-color": "var(--bs-primary)"} autofocus)
+    .col.d-flex.align-items-center
+      .me-2 Sort by
+      .btn-group(role="group" aria-label="Sort options" onchange="PageApi.handleSortChange(this)")
+        - var isNewestSort = query.sort === "createdAt-"
+        input.btn-check(type="radio" name="sort" value="createdAt" id="sort-oldest" autocomplete="off" checked=!isNewestSort)
+        label.btn.btn-outline-primary(for="sort-oldest") Oldest
+
+        input.btn-check(type="radio" name="sort" value="createdAt-" id="sort-newest" autocomplete="off" checked=isNewestSort)
+        label.btn.btn-outline-primary(for="sort-newest") Newest
+    .col-3.d-flex
+      nav.d-flex(aria-label="Pagination block")
+        ul.pagination.align-items-center.m-0
+          li.page-item(class=page === 1 ? "disabled" : "")
+            a.page-link(href="javascript:void(0)" aria-label="Previous" onclick=`PageApi.handlePageChange(${page-1})`)
+              span(aria-hidden="true") &laquo;
+          li.page-item
+            span.page-link.active(aria-current="page")= page
+          li.page-item(class=page * limit < total ? "" : "disabled")
+            a.page-link(href="javascript:void(0)" aria-label="Next" onclick=`PageApi.handlePageChange(${page+1})`)
+              span(aria-hidden="true") &raquo;
