@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Link } from "../models/link.model";
 import { BadRequestError } from "../errors/bad_request.error";
+import { logger } from "../services/logger";
 
 async function getAllLinks(req: Request, res: Response) {
   const filter = new RegExp(String(req.query.filter || ""), "i");
@@ -15,8 +16,15 @@ async function getAllLinks(req: Request, res: Response) {
   const total = await Link.find().merge(query).countDocuments();
   const links = await query.limit(limit).skip((page - 1) * limit);
   const flash = { ...req.session.flash };
-
   req.session.flash = undefined;
+
+  logger.info(`LinkController__getAllLinks
+    - total results: ${links.length},
+    - query params: ${JSON.stringify(req.query)},
+    - page: ${page},
+    - pageSize: ${limit},
+    - total: ${total}`);
+
   res.render("index", {
     title: "Url Shortener",
     links,
@@ -39,6 +47,11 @@ async function getLinkById(req: Request, res: Response) {
     if (!link) {
       throw new BadRequestError("Invalid request");
     }
+
+    logger.info(`LinkController__getLinkById
+    - result: ${JSON.stringify(link, null, 6)},
+    - url params: ${JSON.stringify(req.params)}`);
+
     res.render("link_details", {
       link,
     });
@@ -56,6 +69,10 @@ async function createLink(req: Request, res: Response) {
     const link = Link.build(req.body.original);
     await link.save();
     req.session.flash = { level: "success", msg: "Link successfully created." };
+
+    logger.info(`LinkController__createLink
+    - result: ${JSON.stringify(link, null, 6)}`);
+
     res.redirect("/");
   }
 }
@@ -74,6 +91,10 @@ async function updateLink(req: Request, res: Response) {
       { original: updatedLink.original, short: updatedLink.short }
     );
     req.session.flash = { level: "success", msg: "Link successfully updated." };
+
+    logger.info(`LinkController__updateLink
+    - result: ${JSON.stringify(updatedLink, null, 6)}`);
+
     res.redirect("/");
   }
 }
@@ -84,6 +105,10 @@ async function deleteLink(req: Request, res: Response) {
     throw new BadRequestError("Onvalid request");
   }
   await Link.deleteOne({ _id: req.params.id });
+
+  logger.info(`LinkController__deleteLink
+  - result id: ${req.params.id}`);
+
   res.json({ id: req.params.id });
 }
 

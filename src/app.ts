@@ -9,10 +9,12 @@ import { linkRoutes } from "./routes/link.routes";
 import { errorHandling } from "./middlewares/error_handling.middleware";
 import { shortRoutes } from "./routes/short.routes";
 import { NotFoundError } from "./errors/not_found.error";
+import { morganMiddleware } from "./middlewares/morgan.middleware";
 
 const app = express();
 
 app.use(methodOverride("_method"));
+app.use(morganMiddleware);
 app.use(cookieParser());
 app.use(
   session({ secret: "my secret", resave: true, saveUninitialized: true })

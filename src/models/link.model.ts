@@ -1,5 +1,5 @@
 import { Document, Model, Schema, model } from "mongoose";
-import urlService from "../services/url.service";
+import urlService from "../services/url.helper";
 
 interface LinkDoc extends Document {
   original: string;
