@@ -4,14 +4,14 @@ form#sort-filter-form.container.p-0(method="GET" action="/links")
       input.ms-md-4.form-control(value=query.filter placeholder="Search" name="filter" id="filter" style={"border-color": "var(--bs-primary)"} autofocus)
     .col.d-flex.align-items-center
       .me-2 Sort by
-      .btn-group(role="group" aria-label="Sort options" onchange="PageApi.handleSortChange(this)")
+      .btn-group(role="group" aria-label="Sort options")
         - var isNewestSort = query.sort === "createdAt-"
-        input.btn-check(type="radio" name="sort" value="createdAt" id="sort-oldest" autocomplete="off" checked=!isNewestSort)
+        input.btn-check(type="radio" name="sort" value="createdAt" id="sort-oldest" onchange="PageApi?.handleSortChange(this)" autocomplete="off" checked=!isNewestSort)
         label.btn.btn-outline-primary(for="sort-oldest")
           span.d-none.d-sm-block Oldest
           i.bi.bi-sort-alpha-down.d-block.d-sm-none
 
-        input.btn-check(type="radio" name="sort" value="createdAt-" id="sort-newest" autocomplete="off" checked=isNewestSort)
+        input.btn-check(type="radio" name="sort" value="createdAt-" id="sort-newest" onchange="PageApi?.handleSortChange(this)" autocomplete="off" checked=isNewestSort)
         label.btn.btn-outline-primary(for="sort-newest")
           span.d-none.d-sm-block Newest
           i.bi.bi-sort-alpha-up.d-block.d-sm-none

@@ -8,5 +8,7 @@ declare module "express-session" {
       level: FlashType;
       msg: string;
     };
+    cachedData: unknown;
+    nocache: boolean;
   }
 }

@@ -1,6 +1,7 @@
 import express from "express";
 import linkController from "../controllers/link.controller";
 import { body, param } from "express-validator";
+import { cacheMiddleware } from "../middlewares/cache.middleware";
 
 const idParamValidation = param("id")
   .notEmpty()
@@ -15,8 +16,8 @@ const originalParamValidation = body("original")
 
 const router = express.Router();
 
-router.get("/", linkController.getAllLinks);
-router.get("/:id", linkController.getLinkById);
+router.get("/", cacheMiddleware, linkController.getAllLinks);
+router.get("/:id", cacheMiddleware, linkController.getLinkById);
 router.delete("/:id", [idParamValidation], linkController.deleteLink);
 router.post("/:id", [originalParamValidation], linkController.createLink);
 router.put(

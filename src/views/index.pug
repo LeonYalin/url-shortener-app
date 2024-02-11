@@ -2,7 +2,7 @@ extends layouts/layout.pug
 
 block scripts
   script.
-    window.addEventListener("load", function() {
+    window.addEventListener("DOMContentLoaded", function() {
       window.PageApi = {
         handleCopyLink(e) {
           const linkshort = e.dataset.linkshort;
@@ -35,7 +35,6 @@ block scripts
           window.open(`${window.location.host}${link}`, '_blank');
         },
         handleSortChange(e) {
-          const value = e.querySelector('input[checked]').value;
           e.closest('form').submit();
         },
         handlePageChange(page) {

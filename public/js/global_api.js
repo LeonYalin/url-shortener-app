@@ -1,4 +1,4 @@
-window.addEventListener("load", function () {
+window.addEventListener("DOMContentLoaded", function () {
   const globalToast = bootstrap.Toast.getOrCreateInstance("#global-toast");
   const globalModal = new bootstrap.Modal("#global-modal");
   let modalOkCallback = null;
